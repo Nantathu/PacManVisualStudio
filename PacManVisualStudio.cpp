@@ -397,12 +397,13 @@ void MapOutput()
         }// endfor i < MAP_SIZE_Y
 
         // Outputing score, velocity, SpeedBuff timer to check if everything is working properly.
-        if (Player1.GetScore() != mainMap.iMaxScore) 
+        if (Player1.GetScore() != mainMap.iMaxScore)
         {
             sMapa += "Score: " + to_string(Player1.GetScore());
         }
-        else if (Player1.GetScore() == mainMap.iMaxScore) 
+        else if (Player1.GetScore() == mainMap.iMaxScore)
         {
+            system("pause");
             sMapa += "\tYOU WON!";
         }
         cout << sMapa;
@@ -502,14 +503,6 @@ void ScoreSystem() {
     }
 }
 
-void ExitGame() {
-    // Exit game
-    if (GetAsyncKeyState(VK_ESCAPE))
-    {
-        ifGame = false;
-    }
-}
-
 void MainGameLoop() {
     bool ifGame = true;
 
@@ -531,7 +524,12 @@ void MainGameLoop() {
             ScoreSystem();
         }// endfor i <= Movement;
 
-        ExitGame();
+        // Exit game
+        if (GetAsyncKeyState(VK_ESCAPE))
+        {
+            ifGame = false;
+        }
+       
         GhostMovementSystem();
         MapOutput();
     }// endwhile (ifGame)
