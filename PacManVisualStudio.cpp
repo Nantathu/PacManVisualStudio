@@ -50,8 +50,8 @@ int iMap[MAX_MAP_SIZE][MAX_MAP_SIZE] = {
     {M,P1,M,P1,M,M,M,P1,M,M,P1,M,P1,M,M,M,P1,M,P1,M},                       //LINE 6
     {M,P1,M,P1,M,M,M,P1,M,M,P1,M,P1,M,M,M,P1,M,P1,M},                       //LINE 7
     {M,P1,M,P1,M,M,P1,P1,P1,P1,P1,P1,P1,P1,M,M,P1,M,P1,M},                  //LINE 8
-    {M,P1,M,P1,M,M,P1,M,M,W,M,M,M,P1,M,M,P1,M,P1,M},                       //LINE 9
-    {W,P1,P1,P1,P1,P1,P1,M,W,W,W,W,M,P1,P1,P1,P1,P1,P1,W},              //LINE 10
+    {M,P1,M,P1,M,M,P1,M,M,W,M,M,M,P1,M,M,P1,M,P1,M},                        //LINE 9
+    {W,P1,P1,P1,P1,P1,P1,M,W,W,W,W,M,P1,P1,P1,P1,P1,P1,W},                  //LINE 10
     {M,P1,M,P1,M,M,P1,M,M,M,M,M,M,P1,M,M,P1,M,P1,M},                        //LINE 11
     {M,P1,M,P1,M,M,P1,P1,P1,P1,P1,P1,P1,P1,M,M,P1,M,P1,M},                  //LINE 12
     {M,P1,M,P1,M,M,M,P1,M,P1,M,M,P1,M,M,M,P1,M,P1,M},                       //LINE 13
@@ -297,7 +297,7 @@ public:
 
 // Class Objects definition
 Player Player1;
-Map mainMap;
+Map mainMap;    
 Ghost Ghost1;
 
 void GhostUpMove() 
@@ -415,7 +415,8 @@ void MapOutput()
     Sleep(120);
 }
 
-void PlayerMovement() {
+void PlayerMovement() 
+{
     // Move down
     if (GetAsyncKeyState(VK_DOWN))
     {
@@ -485,7 +486,6 @@ void PlayerMovement() {
             Player1.setX(0);
             Player1.setY(9);
         }// endif (Player1.getY() == 9 && Player1.getX() == 19)
-
     }//endif GetAsyncKeyState(VK_RIGHT)
 }
 
@@ -494,6 +494,7 @@ void ScoreSystem() {
     if (iMap[Player1.getY()][Player1.getX()] == P1)
     {
         iMap[Player1.getY()][Player1.getX()] = W;
+
         Player1.SetScore(Player1.GetScore() + 1);
         ifChange = true;
     }
@@ -502,6 +503,7 @@ void ScoreSystem() {
     if (iMap[Player1.getY()][Player1.getX()] == P2)
     {
         iMap[Player1.getY()][Player1.getX()] = W;
+
         Player1.SetScore(Player1.GetScore() + 2);
         ifChange = true;
     }
