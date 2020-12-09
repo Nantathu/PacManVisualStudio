@@ -403,12 +403,14 @@ void PlayerMovement() {
     }// endif GetAsyncKeyState(VK_LEFT)
 
     // Move to the right
-    if (GetAsyncKeyState(VK_RIGHT)) {
+    if (GetAsyncKeyState(VK_RIGHT)) 
+    {
         if (iMap[Player1.getY()][Player1.getX() + 1] != M)
         {
             Player1.addX(1);
             ifChange = true;
         }// endif (iMap[Player1.getY()][Player1.getX() + 1] != M)
+
         // Warp to the left side of the map
         if (Player1.getY() == 9 && Player1.getX() == 19)
         {
@@ -478,5 +480,5 @@ int main()
 
         GhostMovement();
         MapOutput();
-    } // endwhile (ifGame)
+    }// endwhile (ifGame)
 }
