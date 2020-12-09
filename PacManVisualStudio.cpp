@@ -400,11 +400,15 @@ void MapOutput()
         if (Player1.GetScore() != mainMap.iMaxScore)
         {
             sMapa += "Score: " + to_string(Player1.GetScore());
+            sMapa += "\nPlayer X: " + to_string(Player1.getX());
+            sMapa += "\nPlayer Y: " + to_string(Player1.getY());
+            sMapa += "\nGhost X: " + to_string(Ghost1.getX());
+            sMapa += "\nGhost Y: " + to_string(Ghost1.getY());
         }
         else if (Player1.GetScore() == mainMap.iMaxScore)
         {
-            system("pause");
-            sMapa += "\tYOU WON!";
+            cout << "YOU WON!";
+            Sleep(9999);
         }
         cout << sMapa;
     }
@@ -522,14 +526,13 @@ void MainGameLoop() {
         {
             PlayerMovement();
             ScoreSystem();
-        }// endfor i <= Movement;
+        }
 
-        // Exit game
         if (GetAsyncKeyState(VK_ESCAPE))
         {
             ifGame = false;
         }
-       
+        
         GhostMovementSystem();
         MapOutput();
     }// endwhile (ifGame)
