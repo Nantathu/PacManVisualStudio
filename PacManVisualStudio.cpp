@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-//#include <unistd.h>
 #include <chrono>
 
 using namespace std;
@@ -64,111 +63,111 @@ int iMap[MAX_MAP_SIZE][MAX_MAP_SIZE] = {
     {M,M,M,M,M,M,M,M,M,M,M,W,M,M,M,M,M,M,M,M}                               //LINE 19
 };
 
-class Player {
+class Player 
+{
 private:
     int X = 9;
     int Y = 11;
     int iScore = 0;
     float fVelocity = 1.0;
     int iPlayerSign = PLAYER;
-    bool ifBuff = false;
-    bool ifDebuff = false;
-    chrono::steady_clock::time_point tBuffTime;
-    chrono::steady_clock::time_point tDebuffTime;
+    float fBuffDuration = 0;
 
 public:
     // Change position of a player
-    void ChangePosition(int pos_X, int pos_Y) {
-        if (pos_X >= 0) {
+    void ChangePosition(int pos_X, int pos_Y) 
+    {
+        if (pos_X >= 0) 
+        {
             X = pos_X;
         }
-        if (pos_Y >= 0) {
+        if (pos_Y >= 0) 
+        {
             Y = pos_Y;
         }
     }
 
     // Score
-    void SetScore(int value) {
+    void SetScore(int value) 
+    {
         iScore = value;
     }
-    int GetScore() {
+
+    int GetScore() 
+    {
         return iScore;
     }
 
-    // Buff and debuff
-    int getBuff() {
-        return ifBuff;
-    }
-    void setBuff(bool ifBuffed) {
-        ifBuff = ifBuffed;
-    }
-    void changeBuff() {
-        tBuffTime = chrono::steady_clock::now() + chrono::seconds(5);
-        ifBuff = true;
-    }
-    chrono::steady_clock::time_point getBuffTime() {
-        return tBuffTime;
-    }
 
-    void setDebuff(bool ifDebuffed) {
-        ifDebuff = ifDebuffed;
-    }
-    int getDebuff() {
-        return ifDebuff;
-    }
-    void changeDebuff() {
-        tDebuffTime = chrono::steady_clock::now() + chrono::seconds(5);
-        ifDebuff = true;
-    }
-    chrono::steady_clock::time_point getDebuffTime() {
-        return tDebuffTime;
-    }
+    // Buff and debuff
+    
+
 
     // Y axis of player
-    void setY(float value) {
+    void setY(float value) 
+    {
         Y = value;
     }
-    void addY(float value) {
+
+    void addY(float value) 
+    {
         Y = Y + value;
     }
-    int getY() {
+
+    int getY() 
+    {
         return ((int)Y);
     }
 
+
     // X axis of player
-    void setX(float value) {
+    void setX(float value) 
+    {
         X = value;
     }
-    void addX(float value) {
+
+    void addX(float value) 
+    {
         X = X + value;
     }
-    int getX() {
+
+    int getX() 
+    {
         return ((int)X);
     }
 
+
     // Velocity of player
-    void setVelocity(float vel) {
+    void setVelocity(float vel) 
+    {
         fVelocity = vel;
     }
-    float getVelocity() {
+
+    float getVelocity() 
+    {
         return fVelocity;
     }
 };
 
-class Map {
+class Map 
+{
 public:
 
-    int iMaxScore = 164;
+    int iMaxScore = 159;
 
-    void SaveMapFile(char* FileName) {
+    void SaveMapFile(char* FileName) 
+    {
         fstream file;
         file.open(FileName, ios::out);
 
-        if (file.good() == true) {
+        if (file.good() == true) 
+        {
             file << MAP_SIZE_X << " " << '\n';
             file << MAP_SIZE_Y << " " << '\n';
-            for (int i = 0; i < MAP_SIZE_Y; i++) {
-                for (int j = 0; j < MAP_SIZE_X; j++) {
+            for (int i = 0; i < MAP_SIZE_Y; i++) 
+            {
+                for (int j = 0; j < MAP_SIZE_X; j++) 
+                {
                     file << iMap[i][j] << " ";
                 }// endfor j < MAP_SIZE_X
                 file << '\n';
@@ -180,9 +179,12 @@ public:
         }// endif file.good() == true
     }
 
-    void DrawMap() {
-        for (int i = 0; i <= MAP_SIZE_Y - 1; i++) {
-            for (int j = 0; j <= MAP_SIZE_X - 1; j++) {
+    void DrawMap() 
+    {
+        for (int i = 0; i <= MAP_SIZE_Y - 1; i++) 
+        {
+            for (int j = 0; j <= MAP_SIZE_X - 1; j++) 
+            {
                 iMapFromFile[i][j] = iMap[i][j];
                 cout << char(iMapFromFile[i][j]);
             }// end for j <= MAP_SIZE_X
@@ -190,19 +192,24 @@ public:
         }// endfor i <= MAP_SIZE_Y
     }
 
-    void LoadMapFile(char* FileName) {
+    void LoadMapFile(char* FileName) 
+    {
         fstream file;
         file.open(FileName, ios::in);
 
-        if (file.good() == false) {
+        if (file.good() == false) 
+        {
             cout << "File doesn't exist" << '\n';
             exit(0);
         }
-        else {
+        else 
+        {
             file >> iMapSizeX;
             file >> iMapSizeY;
-            for (int i = 0; i < iMapSizeY; i++) {
-                for (int j = 0; j < iMapSizeX; j++) {
+            for (int i = 0; i < iMapSizeY; i++) 
+            {
+                for (int j = 0; j < iMapSizeX; j++) 
+                {
                     file >> iMapFromFile[i][j];
                 }// endfor j < iMapSizeX
             }// endfor i < iMapSizeY
@@ -210,16 +217,15 @@ public:
     }
 };
 
-class Ghost {
+class Ghost 
+{
 private:
     int X = 9;
     int Y = 9;
     int iScore = 0;
     int iGhostSign = G;
     float fVelocity = 1.2;
-    int ifBuff = false;
-    int ifDebuff = false;
-
+    
 
 public:
 
@@ -241,26 +247,6 @@ public:
 
 
     // Buff and debuff functions
-    bool setBuff(bool ifBuffed) 
-    {
-        ifBuff = ifBuffed;
-        fVelocity = 5.97;
-    }
-
-    int getBuff() 
-    {
-        return ifBuff;
-    }
-
-    bool setDebuff(bool ifDebuffed) 
-    {
-        ifDebuff = ifDebuffed;
-    }
-
-    int getDebuff() 
-    {
-        return ifDebuff;
-    }
 
 
     // Y axis of Ghost
@@ -296,6 +282,7 @@ public:
         return ((int)X);
     }
 
+
     // Velocity of ghost
     void setVelocity(float vel) 
     {
@@ -313,48 +300,96 @@ Player Player1;
 Map mainMap;
 Ghost Ghost1;
 
-void GhostMovement() {
-    // Ghost movement
+void GhostUpMove() 
+{
     //If the block above is not a wall - move there
-    if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M) 
+    if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M)
     {
         Ghost1.addY(1);
         ifGame = true;
     }
+}
+
+void GhostDownMove() 
+{
     //If the block under is not a wall - move there
-    else if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M) 
+    if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M)
     {
         Ghost1.addY(-1);
         ifGame = true;
     }
+}
+
+void GhostRightMove() 
+{
     //If the block on the right is not a wall - move there
-    else if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M) 
+    if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M)
     {
         Ghost1.addX(1);
         ifGame = true;
     }
+}
+
+void GhostLeftMove() 
+{
     //If the block on the left is not a wall - move there
-    else if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M) 
+    if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M)
     {
         Ghost1.addX(-1);
         ifGame = true;
     }
 }
 
-void MapOutput() {
+void GhostMovementSystem() 
+{
+    srand(time(NULL));
+    int iLastMove = rand() % 4 + 1;
+
+    if (iLastMove != 2 && iLastMove != 4)
+    {
+        if (iLastMove == 1)
+        {
+            GhostDownMove();
+        }
+        else if (iLastMove == 3)
+        {
+            GhostUpMove();
+        }
+    }
+    else if (iLastMove != 1 && iLastMove != 3)
+    {
+        if (iLastMove == 2)
+        {
+            GhostRightMove();
+        }
+        else if (iLastMove == 4)
+        {
+            GhostLeftMove();
+        }
+    }
+}
+
+void MapOutput() 
+{
     // Drawing map
-    if (ifChange) {
+    if (ifChange) 
+    {
         system("cls");
         string sMapa = "";
-        for (int i = 0; i < MAP_SIZE_Y; i++) {
-            for (int j = 0; j < MAP_SIZE_X; j++) {
-                if (Player1.getX() == j && Player1.getY() == i) {
+        for (int i = 0; i < MAP_SIZE_Y; i++) 
+        {
+            for (int j = 0; j < MAP_SIZE_X; j++) 
+            {
+                if (Player1.getX() == j && Player1.getY() == i) 
+                {
                     sMapa += char(PLAYER);
                 }// endif Player1.getX() == j && Player1.getY() == i
-                else if (Ghost1.getX() == j && Ghost1.getY() == i) {
+                else if (Ghost1.getX() == j && Ghost1.getY() == i) 
+                {
                     sMapa += char(G);
                 }// endif Ghost1.getX() == j && Ghost1.getY() == i
-                else {
+                else 
+                {
                     sMapa += char(iMap[i][j]);
                 }
             }// endfor j < MAP_SIZE_X
@@ -362,12 +397,12 @@ void MapOutput() {
         }// endfor i < MAP_SIZE_Y
 
         // Outputing score, velocity, SpeedBuff timer to check if everything is working properly.
-        if (Player1.GetScore() != mainMap.iMaxScore) {
+        if (Player1.GetScore() != mainMap.iMaxScore) 
+        {
             sMapa += "Score: " + to_string(Player1.GetScore());
-            //sMapa += "\nVelocity: " + to_string(Movement);
-            sMapa += "\nifBuffed: " + to_string(Player1.getBuff());
         }
-        else if (Player1.GetScore() == mainMap.iMaxScore) {
+        else if (Player1.GetScore() == mainMap.iMaxScore) 
+        {
             sMapa += "\tYOU WON!";
         }
         cout << sMapa;
@@ -385,12 +420,13 @@ void PlayerMovement() {
             ifChange = true;
         }// endif iMap[Player1.getY() + 1][Player1.getX()] != M
 
-       // Warp to the up side of the map
+        // Warp to the up side of the map
         if (Player1.getY() == 18 && Player1.getX() == 11)
         {
             Player1.setX(9);
             Player1.setY(0);
         }// endif Player1.getY() == 18 && Player1.getX() == 11
+
     }// endif (GetAsyncKeyState(VK_DOWN))
 
     // Move up
@@ -402,12 +438,13 @@ void PlayerMovement() {
             ifChange = true;
         }// endif (iMap[Player1.getY() - 1][Player1.getX()] != M)
 
-    // Warp to the down side of the map
+        // Warp to the down side of the map
         if (Player1.getY() == 0 && Player1.getX() == 9)
         {
             Player1.setX(11);
             Player1.setY(18);
         }// endif (Player1.getY() == 0 && Player1.getX() == 9)
+
     } // endif GetAsyncKeyState(VK_UP)
 
     // Move to the left
@@ -425,6 +462,7 @@ void PlayerMovement() {
             Player1.setX(19);
             Player1.setY(9);
         }// endif (Player1.getY() == 9 && Player1.getX() == 0)
+
     }// endif GetAsyncKeyState(VK_LEFT)
 
     // Move to the right
@@ -442,10 +480,11 @@ void PlayerMovement() {
             Player1.setX(0);
             Player1.setY(9);
         }// endif (Player1.getY() == 9 && Player1.getX() == 19)
+
     }//endif GetAsyncKeyState(VK_RIGHT)
 }
 
-void ScoreOne() {
+void ScoreSystem() {
     // Score +1 for P1
     if (iMap[Player1.getY()][Player1.getX()] == P1)
     {
@@ -453,24 +492,12 @@ void ScoreOne() {
         Player1.SetScore(Player1.GetScore() + 1);
         ifChange = true;
     }
-}
 
-void ScoreTwo() {
     // Score +2 for P2
     if (iMap[Player1.getY()][Player1.getX()] == P2)
     {
         iMap[Player1.getY()][Player1.getX()] = W;
         Player1.SetScore(Player1.GetScore() + 2);
-
-        if (chrono::steady_clock::now() > Player1.getBuffTime())
-        {
-            Player1.setBuff(false);
-            Player1.setVelocity(1);
-        }
-        else
-        {
-            Player1.setVelocity(5.97);
-        }
         ifChange = true;
     }
 }
@@ -484,7 +511,8 @@ void ExitGame() {
 }
 
 void MainGameLoop() {
-    // Main game loop
+    bool ifGame = true;
+
     while (ifGame)
     {
         // Velocity related variables
@@ -500,17 +528,15 @@ void MainGameLoop() {
         for (int i = 0; i <= Movement; i++)
         {
             PlayerMovement();
-            ScoreOne();
-            ScoreTwo();
+            ScoreSystem();
         }// endfor i <= Movement;
 
         ExitGame();
-        GhostMovement();
+        GhostMovementSystem();
         MapOutput();
     }// endwhile (ifGame)
 }
 
-// Main loop
 int main()
 {
     MainGameLoop();
