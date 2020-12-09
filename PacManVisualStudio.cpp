@@ -51,8 +51,8 @@ int iMap[MAX_MAP_SIZE][MAX_MAP_SIZE] = {
     {M,P1,M,P1,M,M,M,P1,M,M,P1,M,P1,M,M,M,P1,M,P1,M},                       //LINE 6
     {M,P1,M,P1,M,M,M,P1,M,M,P1,M,P1,M,M,M,P1,M,P1,M},                       //LINE 7
     {M,P1,M,P1,M,M,P1,P1,P1,P1,P1,P1,P1,P1,M,M,P1,M,P1,M},                  //LINE 8
-    {M,P1,M,P1,M,M,P1,M,M,P1,M,M,M,P1,M,M,P1,M,P1,M},                       //LINE 9
-    {W,P1,P1,P1,P1,P1,P1,M,P1,P1,P1,P1,M,P1,P1,P1,P1,P1,P1,W},              //LINE 10
+    {M,P1,M,P1,M,M,P1,M,M,W,M,M,M,P1,M,M,P1,M,P1,M},                       //LINE 9
+    {W,P1,P1,P1,P1,P1,P1,M,W,W,W,W,M,P1,P1,P1,P1,P1,P1,W},              //LINE 10
     {M,P1,M,P1,M,M,P1,M,M,M,M,M,M,P1,M,M,P1,M,P1,M},                        //LINE 11
     {M,P1,M,P1,M,M,P1,P1,P1,P1,P1,P1,P1,P1,M,M,P1,M,P1,M},                  //LINE 12
     {M,P1,M,P1,M,M,M,P1,M,P1,M,M,P1,M,M,M,P1,M,P1,M},                       //LINE 13
@@ -502,7 +502,6 @@ void MainGameLoop() {
             PlayerMovement();
             ScoreOne();
             ScoreTwo();
-            
         }// endfor i <= Movement;
 
         ExitGame();
