@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-#include <unistd.h>
+//#include <unistd.h>
 #include <chrono>
 
 using namespace std;
@@ -223,66 +223,87 @@ private:
 
 public:
 
-    void ChangePosition(int pos_X, int pos_Y) {
-        if (pos_X >= 0) {
+    void ChangePosition(int pos_X, int pos_Y) 
+    {
+        if (pos_X >= 0)
             X = pos_X;
-        }
-        if (pos_Y >= 0) {
+
+        if (pos_Y >= 0) 
             Y = pos_Y;
-        }
     }
 
 
-    void addAxis(int pos_X, int pos_Y) {
+    void addAxis(int pos_X, int pos_Y) 
+    {
         X += pos_X;
         Y += pos_Y;
     }
 
 
     // Buff and debuff functions
-    bool setBuff(bool ifBuffed) {
+    bool setBuff(bool ifBuffed) 
+    {
         ifBuff = ifBuffed;
         fVelocity = 5.97;
     }
-    int getBuff() {
+
+    int getBuff() 
+    {
         return ifBuff;
     }
-    bool setDebuff(bool ifDebuffed) {
+
+    bool setDebuff(bool ifDebuffed) 
+    {
         ifDebuff = ifDebuffed;
     }
-    int getDebuff() {
+
+    int getDebuff() 
+    {
         return ifDebuff;
     }
 
 
     // Y axis of Ghost
-    void setY(float value) {
+    void setY(float value) 
+    {
         Y = value;
     }
-    void addY(float value) {
+
+    void addY(float value)
+    {
         Y = Y + value;
     }
-    int getY() {
+
+    int getY() 
+    {
         return ((int)Y);
     }
 
 
     // X axis of Ghost
-    void setX(float value) {
+    void setX(float value) 
+    {
         X = value;
     }
-    void addX(float value) {
+
+    void addX(float value) 
+    {
         X = X + value;
     }
-    int getX() {
+
+    int getX() 
+    {
         return ((int)X);
     }
 
     // Velocity of ghost
-    void setVelocity(float vel) {
+    void setVelocity(float vel) 
+    {
         fVelocity = vel;
     }
-    float getVelocity() {
+
+    float getVelocity() 
+    {
         return fVelocity;
     }
 };
@@ -295,22 +316,26 @@ Ghost Ghost1;
 void GhostMovement() {
     // Ghost movement
     //If the block above is not a wall - move there
-    if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M) {
+    if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M) 
+    {
         Ghost1.addY(1);
         ifGame = true;
     }
     //If the block under is not a wall - move there
-    else if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M) {
+    else if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M) 
+    {
         Ghost1.addY(-1);
         ifGame = true;
     }
     //If the block on the right is not a wall - move there
-    else if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M) {
+    else if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M) 
+    {
         Ghost1.addX(1);
         ifGame = true;
     }
     //If the block on the left is not a wall - move there
-    else if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M) {
+    else if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M) 
+    {
         Ghost1.addX(-1);
         ifGame = true;
     }
@@ -420,65 +445,74 @@ void PlayerMovement() {
     }//endif GetAsyncKeyState(VK_RIGHT)
 }
 
-// Main loop
-int main()
-{
-    // Velocity related variables
-    CurrentFrame = clock();
-    PrevFrame = clock();
-
-    // Save map to file/Load map from file/Draw map from variable
-    // mainMap.SaveMapFile("Map.txt");
-    // mainMap.LoadMapFile("Map.txt");
-    // mainMap.DrawMap();
-
-    // Main game loop
-    while (ifGame) 
+void ScoreOne() {
+    // Score +1 for P1
+    if (iMap[Player1.getY()][Player1.getX()] == P1)
     {
+        iMap[Player1.getY()][Player1.getX()] = W;
+        Player1.SetScore(Player1.GetScore() + 1);
+        ifChange = true;
+    }
+}
+
+void ScoreTwo() {
+    // Score +2 for P2
+    if (iMap[Player1.getY()][Player1.getX()] == P2)
+    {
+        iMap[Player1.getY()][Player1.getX()] = W;
+        Player1.SetScore(Player1.GetScore() + 2);
+
+        if (chrono::steady_clock::now() > Player1.getBuffTime())
+        {
+            Player1.setBuff(false);
+            Player1.setVelocity(1);
+        }
+        else
+        {
+            Player1.setVelocity(5.97);
+        }
+        ifChange = true;
+    }
+}
+
+void ExitGame() {
+    // Exit game
+    if (GetAsyncKeyState(VK_ESCAPE))
+    {
+        ifGame = false;
+    }
+}
+
+void MainGameLoop() {
+    // Main game loop
+    while (ifGame)
+    {
+        // Velocity related variables
+        CurrentFrame = clock();
+        PrevFrame = clock();
+
         // Time and velocity related variables
         PrevFrame = CurrentFrame;
         CurrentFrame = clock();
         deltaTime = CurrentFrame - PrevFrame;
         float Movement = deltaTime / 1000.0 * Player1.getVelocity();
 
-        for (int i = 0; i <= Movement; i++) 
+        for (int i = 0; i <= Movement; i++)
         {
             PlayerMovement();
-
-            // Score +1 for P1
-            if (iMap[Player1.getY()][Player1.getX()] == P1) 
-            {
-                iMap[Player1.getY()][Player1.getX()] = W;
-                Player1.SetScore(Player1.GetScore() + 1);
-                ifChange = true;
-            }
-
-            // Score +2 for P2
-            if (iMap[Player1.getY()][Player1.getX()] == P2) 
-            {
-                iMap[Player1.getY()][Player1.getX()] = W;
-                Player1.SetScore(Player1.GetScore() + 2);
-
-                if (chrono::steady_clock::now() > Player1.getBuffTime()) 
-                {
-                    Player1.setBuff(false);
-                    Player1.setVelocity(1);
-                }
-                else 
-                {
-                    Player1.setVelocity(5.97);
-                }
-                ifChange = true;
-            }//endif iMap[Player1.getY()][Player1.getX()] == P2
+            ScoreOne();
+            ScoreTwo();
+            
         }// endfor i <= Movement;
 
-        // Exit game
-        if (GetAsyncKeyState(VK_ESCAPE)) 
-        {
-            ifGame = false;
-        }
-
+        ExitGame();
         GhostMovement();
         MapOutput();
     }// endwhile (ifGame)
+}
+
+// Main loop
+int main()
+{
+    MainGameLoop();
 }
