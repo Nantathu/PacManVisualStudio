@@ -140,6 +140,7 @@ class Player : public Entity
 {
 private:
     int iScore = 0;
+    int iLifes = 3;
 
 public:
     // Score
@@ -151,6 +152,21 @@ public:
     int getScore() 
     {
         return iScore;
+    }
+
+    void setLifes(int value)
+    {
+        iLifes = value;
+    }
+
+    int getLifes()
+    {
+        return iLifes;
+    }
+
+    void substractLife()
+    {
+        iLifes--;
     }
 };
 
@@ -316,7 +332,8 @@ void mapOutput()
         if (Player1.getScore() != mainMap.iMaxScore)
         {
             sMapa += "Score: " + to_string(Player1.getScore());
-            sMapa += "Score: " + to_string(Player1.getVelocity());
+            sMapa += "\nLifes: " + to_string(Player1.getLifes());
+            sMapa += "\nVelocity: " + to_string(Player1.getVelocity());
         }
         else if (Player1.getScore() == mainMap.iMaxScore)
         {
@@ -459,10 +476,23 @@ void mainGameLoop() {
         {
             if (Player1.getY() == Ghost1.getY())
             {
-                ifGame = false;
-                system("cls");
-                cout << "GAME OVER!";   
-                exit(0);
+                Player1.substractLife();
+
+                Player1.setX(9);
+                Player1.setY(11);
+
+                Ghost1.setX(9);
+                Ghost1.setY(9);
+
+
+                if (Player1.getLifes() <= 0)
+                {
+                    ifGame = false;
+                    system("cls");
+                    cout << "GAME OVER!";   
+                    Sleep(200);
+                    exit(0);
+                }
             }
         }
         
