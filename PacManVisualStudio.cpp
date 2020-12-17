@@ -63,30 +63,79 @@ int iMap[MAX_MAP_SIZE][MAX_MAP_SIZE] = {
     {M,M,M,M,M,M,M,M,M,M,M,W,M,M,M,M,M,M,M,M}                               //LINE 19
 };
 
-class Player 
+class Entity
 {
-private:
-    int X = 9;
-    int Y = 11;
-    int iScore = 0;
-    float fVelocity = 1.0;
-    int iPlayerSign = PLAYER;
-    float fBuffDuration = 0;
-
 public:
-    // Change position of a player
-    void ChangePosition(int pos_X, int pos_Y) 
+    int X, Y, iCharacterSign;
+    float fVelocity, fBuffDuration;
+
+    // X axis of an entity
+    void setX(float value)
     {
-        if (pos_X >= 0) 
+        X = value;
+    }
+
+    void addX(float value)
+    {
+        X = X + value;
+    }
+
+    int getX()
+    {
+        return ((int)X);
+    }
+
+
+    // Y axis of an entity
+    void setY(float value)
+    {
+        Y = value;
+    }
+
+    void addY(float value)
+    {
+        Y = Y + value;
+    }
+
+    int getY()
+    {
+        return ((int)Y);
+    }
+
+
+    // Velocity of an Entity
+    void setVelocity(float vel)
+    {
+        fVelocity = vel;
+    }
+
+    float getVelocity()
+    {
+        return fVelocity;
+    }
+
+
+    // Change position of an entity
+    void ChangePosition(int pos_X, int pos_Y)
+    {
+        if (pos_X >= 0)
         {
             X = pos_X;
         }
-        if (pos_Y >= 0) 
+
+        if (pos_Y >= 0)
         {
             Y = pos_Y;
         }
     }
+};
 
+class Player : public Entity
+{
+private:
+    int iScore = 0;
+
+public:
     // Score
     void SetScore(int value) 
     {
@@ -97,62 +146,11 @@ public:
     {
         return iScore;
     }
-
-
-    // Buff and debuff
-    
-
-
-    // Y axis of player
-    void setY(float value) 
-    {
-        Y = value;
-    }
-
-    void addY(float value) 
-    {
-        Y = Y + value;
-    }
-
-    int getY() 
-    {
-        return ((int)Y);
-    }
-
-
-    // X axis of player
-    void setX(float value) 
-    {
-        X = value;
-    }
-
-    void addX(float value) 
-    {
-        X = X + value;
-    }
-
-    int getX() 
-    {
-        return ((int)X);
-    }
-
-
-    // Velocity of player
-    void setVelocity(float vel) 
-    {
-        fVelocity = vel;
-    }
-
-    float getVelocity() 
-    {
-        return fVelocity;
-    }
 };
 
 class Map 
 {
 public:
-
     int iMaxScore = 159;
 
     void SaveMapFile(char* FileName) 
@@ -179,6 +177,7 @@ public:
         }// endif file.good() == true
     }
 
+
     void DrawMap() 
     {
         for (int i = 0; i <= MAP_SIZE_Y - 1; i++) 
@@ -191,6 +190,7 @@ public:
             cout << '\n';
         }// endfor i <= MAP_SIZE_Y
     }
+
 
     void LoadMapFile(char* FileName) 
     {
@@ -217,128 +217,21 @@ public:
     }
 };
 
-class Ghost 
+class Ghost : public Entity
 {
 private:
     int X = 9;
     int Y = 9;
     int iScore = 0;
-    int iGhostSign = G;
+    int iCharacterSign = G;
     float fVelocity = 1.2;
-    
-
-public:
-
-    void ChangePosition(int pos_X, int pos_Y) 
-    {
-        if (pos_X >= 0)
-            X = pos_X;
-
-        if (pos_Y >= 0) 
-            Y = pos_Y;
-    }
-
-
-    void addAxis(int pos_X, int pos_Y) 
-    {
-        X += pos_X;
-        Y += pos_Y;
-    }
-
-
-    // Buff and debuff functions
-
-
-    // Y axis of Ghost
-    void setY(float value) 
-    {
-        Y = value;
-    }
-
-    void addY(float value)
-    {
-        Y = Y + value;
-    }
-
-    int getY() 
-    {
-        return ((int)Y);
-    }
-
-
-    // X axis of Ghost
-    void setX(float value) 
-    {
-        X = value;
-    }
-
-    void addX(float value) 
-    {
-        X = X + value;
-    }
-
-    int getX() 
-    {
-        return ((int)X);
-    }
-
-
-    // Velocity of ghost
-    void setVelocity(float vel) 
-    {
-        fVelocity = vel;
-    }
-
-    float getVelocity() 
-    {
-        return fVelocity;
-    }
 };
 
 // Class Objects definition
+Entity Entity1;
 Player Player1;
 Map mainMap;    
 Ghost Ghost1;
-
-void GhostUpMove() 
-{
-    //If the block above is not a wall - move there
-    if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M)
-    {
-        Ghost1.addY(1);
-        ifGame = true;
-    }
-}
-
-void GhostDownMove() 
-{
-    //If the block under is not a wall - move there
-    if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M)
-    {
-        Ghost1.addY(-1);
-        ifGame = true;
-    }
-}
-
-void GhostRightMove() 
-{
-    //If the block on the right is not a wall - move there
-    if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M)
-    {
-        Ghost1.addX(1);
-        ifGame = true;
-    }
-}
-
-void GhostLeftMove() 
-{
-    //If the block on the left is not a wall - move there
-    if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M)
-    {
-        Ghost1.addX(-1);
-        ifGame = true;
-    }
-}
 
 void GhostMovementSystem() 
 {
@@ -349,22 +242,42 @@ void GhostMovementSystem()
     {
         if (iLastMove == 1)
         {
-            GhostDownMove();
+            //If the block under is not a wall - move there
+            if (iMap[Ghost1.getY() - 1][Ghost1.getX()] != M)
+            {
+                Ghost1.addY(-1);
+                ifGame = true;
+            }
         }
         else if (iLastMove == 3)
         {
-            GhostUpMove();
+            //If the block above is not a wall - move there
+            if (iMap[Ghost1.getY() + 1][Ghost1.getX()] != M)
+            {
+                Ghost1.addY(1);
+                ifGame = true;
+            }
         }
     }
     else if (iLastMove != 1 && iLastMove != 3)
     {
         if (iLastMove == 2)
         {
-            GhostRightMove();
+            //If the block on the right is not a wall - move there
+            if (iMap[Ghost1.getY()][Ghost1.getX() + 1] != M)
+            {
+                Ghost1.addX(1);
+                ifGame = true;
+            }
         }
         else if (iLastMove == 4)
         {
-            GhostLeftMove();
+            //If the block on the left is not a wall - move there
+            if (iMap[Ghost1.getY()][Ghost1.getX() - 1] != M)
+            {
+                Ghost1.addX(-1);
+                ifGame = true;
+            }
         }
     }
 }
@@ -400,15 +313,11 @@ void MapOutput()
         if (Player1.GetScore() != mainMap.iMaxScore)
         {
             sMapa += "Score: " + to_string(Player1.GetScore());
-            sMapa += "\nPlayer X: " + to_string(Player1.getX());
-            sMapa += "\nPlayer Y: " + to_string(Player1.getY());
-            sMapa += "\nGhost X: " + to_string(Ghost1.getX());
-            sMapa += "\nGhost Y: " + to_string(Ghost1.getY());
         }
         else if (Player1.GetScore() == mainMap.iMaxScore)
         {
             cout << "YOU WON!";
-            Sleep(9999);
+            Sleep(10000);
         }
         cout << sMapa;
     }
@@ -511,6 +420,12 @@ void ScoreSystem() {
 
 void MainGameLoop() {
     bool ifGame = true;
+
+    Player1.setX(9);
+    Player1.setY(11);
+
+    Ghost1.setX(9);
+    Ghost1.setY(9);
 
     while (ifGame)
     {
