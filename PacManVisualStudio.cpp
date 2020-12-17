@@ -67,7 +67,7 @@ class Entity
 {
 public:
     int X, Y, iCharacterSign;
-    float fVelocity, fBuffDuration;
+    double fVelocity, fBuffDuration;
 
     // X axis of an entity
     void setX(float value)
@@ -116,7 +116,7 @@ public:
 
 
     // Change position of an entity
-    void ChangePosition(int pos_X, int pos_Y)
+    void changePosition(int pos_X, int pos_Y)
     {
         if (pos_X >= 0)
         {
@@ -128,6 +128,12 @@ public:
             Y = pos_Y;
         }
     }
+
+    int getPosition()
+    {
+        return ((int)X);
+        return ((int)Y);
+    }
 };
 
 class Player : public Entity
@@ -137,12 +143,12 @@ private:
 
 public:
     // Score
-    void SetScore(int value) 
+    void setScore(int value) 
     {
         iScore = value;
     }
 
-    int GetScore() 
+    int getScore() 
     {
         return iScore;
     }
@@ -153,7 +159,7 @@ class Map
 public:
     int iMaxScore = 159;
 
-    void SaveMapFile(char* FileName) 
+    void saveMapFile(char* FileName) 
     {
         fstream file;
         file.open(FileName, ios::out);
@@ -178,7 +184,7 @@ public:
     }
 
 
-    void DrawMap() 
+    void drawMap() 
     {
         for (int i = 0; i <= MAP_SIZE_Y - 1; i++) 
         {
@@ -192,7 +198,7 @@ public:
     }
 
 
-    void LoadMapFile(char* FileName) 
+    void loadMapFile(char* FileName) 
     {
         fstream file;
         file.open(FileName, ios::in);
@@ -220,9 +226,6 @@ public:
 class Ghost : public Entity
 {
 private:
-    int X = 9;
-    int Y = 9;
-    int iScore = 0;
     int iCharacterSign = G;
     float fVelocity = 1.2;
 };
@@ -233,7 +236,7 @@ Player Player1;
 Map mainMap;    
 Ghost Ghost1;
 
-void GhostMovementSystem() 
+void ghostMovementSystem() 
 {
     srand(time(NULL));
     int iLastMove = rand() % 4 + 1;
@@ -282,7 +285,7 @@ void GhostMovementSystem()
     }
 }
 
-void MapOutput() 
+void mapOutput() 
 {
     // Drawing map
     if (ifChange) 
@@ -310,11 +313,12 @@ void MapOutput()
         }// endfor i < MAP_SIZE_Y
 
         // Outputing score, velocity, SpeedBuff timer to check if everything is working properly.
-        if (Player1.GetScore() != mainMap.iMaxScore)
+        if (Player1.getScore() != mainMap.iMaxScore)
         {
-            sMapa += "Score: " + to_string(Player1.GetScore());
+            sMapa += "Score: " + to_string(Player1.getScore());
+            sMapa += "Score: " + to_string(Player1.getVelocity());
         }
-        else if (Player1.GetScore() == mainMap.iMaxScore)
+        else if (Player1.getScore() == mainMap.iMaxScore)
         {
             cout << "YOU WON!";
             Sleep(10000);
@@ -324,7 +328,7 @@ void MapOutput()
     Sleep(120);
 }
 
-void PlayerMovement() 
+void playerMovement() 
 {
     // Move down
     if (GetAsyncKeyState(VK_DOWN))
@@ -398,13 +402,13 @@ void PlayerMovement()
     }//endif GetAsyncKeyState(VK_RIGHT)
 }
 
-void ScoreSystem() {
+void scoreSystem() {
     // Score +1 for P1
     if (iMap[Player1.getY()][Player1.getX()] == P1)
     {
         iMap[Player1.getY()][Player1.getX()] = W;
 
-        Player1.SetScore(Player1.GetScore() + 1);
+        Player1.setScore(Player1.getScore() + 1);
         ifChange = true;
     }
 
@@ -413,12 +417,12 @@ void ScoreSystem() {
     {
         iMap[Player1.getY()][Player1.getX()] = W;
 
-        Player1.SetScore(Player1.GetScore() + 2);
+        Player1.setScore(Player1.getScore() + 2);
         ifChange = true;
     }
 }
 
-void MainGameLoop() {
+void mainGameLoop() {
     bool ifGame = true;
 
     Player1.setX(9);
@@ -441,21 +445,33 @@ void MainGameLoop() {
 
         for (int i = 0; i <= Movement; i++)
         {
-            PlayerMovement();
-            ScoreSystem();
+            playerMovement();
+            scoreSystem();
         }
 
         if (GetAsyncKeyState(VK_ESCAPE))
         {
             ifGame = false;
         }
+
+        //Player - Ghost collision
+        if (Player1.getX() == Ghost1.getX())
+        {
+            if (Player1.getY() == Ghost1.getY())
+            {
+                ifGame = false;
+                system("cls");
+                cout << "GAME OVER!";   
+                exit(0);
+            }
+        }
         
-        GhostMovementSystem();
-        MapOutput();
+        ghostMovementSystem();
+        mapOutput();
     }// endwhile (ifGame)
 }
 
 int main()
 {
-    MainGameLoop();
+    mainGameLoop();
 }
