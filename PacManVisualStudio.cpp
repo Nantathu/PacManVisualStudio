@@ -252,6 +252,20 @@ Player Player1;
 Map mainMap;    
 Ghost Ghost1;
 
+void setStartingPositions()
+{
+    // Setting up positions
+    Player1.setX(9);
+    Player1.setY(11);
+
+    Ghost1.setX(9);
+    Ghost1.setY(9);
+
+    // Setting up velocities
+    Player1.setVelocity(1.0);
+    Ghost1.setVelocity(1.2);
+}
+
 void ghostMovementSystem() 
 {
     srand(time(NULL));
@@ -333,7 +347,8 @@ void mapOutput()
         {
             sMapa += "Score: " + to_string(Player1.getScore());
             sMapa += "\nLifes: " + to_string(Player1.getLifes());
-            sMapa += "\nVelocity: " + to_string(Player1.getVelocity());
+            sMapa += "\nPlayer Velocity: " + to_string(Player1.getVelocity());
+            sMapa += "\nGhost Velocity: " + to_string(Ghost1.getVelocity());
         }
         else if (Player1.getScore() == mainMap.iMaxScore)
         {
@@ -433,8 +448,17 @@ void scoreSystem() {
     if (iMap[Player1.getY()][Player1.getX()] == P2)
     {
         iMap[Player1.getY()][Player1.getX()] = W;
-
         Player1.setScore(Player1.getScore() + 2);
+
+        clock_t start = clock();
+        while ((clock() - start) / CLOCKS_PER_SEC != 5)
+        {
+            Player1.setVelocity(21.37);
+            Ghost1.setVelocity(5.2);
+        }
+        Player1.setVelocity(1.0);
+        Ghost1.setVelocity(1.2);
+        
         ifChange = true;
     }
 }
@@ -442,11 +466,7 @@ void scoreSystem() {
 void mainGameLoop() {
     bool ifGame = true;
 
-    Player1.setX(9);
-    Player1.setY(11);
-
-    Ghost1.setX(9);
-    Ghost1.setY(9);
+    setStartingPositions();
 
     while (ifGame)
     {
@@ -477,13 +497,8 @@ void mainGameLoop() {
             if (Player1.getY() == Ghost1.getY())
             {
                 Player1.substractLife();
-
-                Player1.setX(9);
-                Player1.setY(11);
-
-                Ghost1.setX(9);
-                Ghost1.setY(9);
-
+                setStartingPositions();
+                Sleep(100);
 
                 if (Player1.getLifes() <= 0)
                 {
